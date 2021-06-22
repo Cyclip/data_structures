@@ -39,7 +39,11 @@ class Node(object):
             self.__type = type_
 
     def add_children(self, children):
-        """Add multiple child nodes."""
+        """Add multiple child nodes.
+
+        Parameters:
+            children: An array of nodes to add
+        """
 
         for child in children:
             if isinstance(child, Node):
@@ -48,14 +52,22 @@ class Node(object):
                 raise TypeError("Child is not a node")
 
     def add_child(self, child):
-        """Add an individual child node."""
+        """Add an individual child node.
+
+        Parameters:
+            child: A single Node.
+        """
         if not self.has_child(child):
             child.parent = self  # Prevent recursion
             self.children.append(child)
             return child
 
     def remove_children(self, children):
-        """Remove multiple child nodes."""
+        """Remove multiple child nodes.
+
+        Parameters:
+            children: An array of nodes to remove
+        """
 
         for child in children:
             if isinstance(child, Node):
@@ -64,7 +76,11 @@ class Node(object):
                 raise TypeError("Child is not a node")
 
     def remove_child(self, child):
-        """Remove an individual child node."""
+        """Remove an individual child node.
+
+        Parameters:
+            child: A single node to remove
+        """
         if self.has_child(child):
             child.set_parent(None)
             self.children.remove(child)
@@ -72,7 +88,11 @@ class Node(object):
             raise ValueError("Child argument is not a child of this node")
 
     def set_parent(self, parent):
-        """Set the current parent node."""
+        """Set the current parent node.
+
+        Parameters:
+            parent: The parent node to set to.
+        """
         self.parent = parent
 
         # Add self as parent's child
@@ -80,7 +100,11 @@ class Node(object):
         parent.add_child(self)
 
     def set_root(self, tree):
-        """Set the node as root of a Tree."""
+        """Set the node as root of a Tree.
+
+        Parameters:
+            tree: The Tree to set the current node the root node in
+        """
         if tree.type == "tree":
             self.root = True
             self.parent = tree
@@ -89,7 +113,11 @@ class Node(object):
             raise TypeError("root is not of type Tree")
 
     def set_data(self, data):
-        """Modify the node's data."""
+        """Modify the node's data.
+
+        Parameters:
+            data: Set the node's data to this
+        """
         if isinstance(data, self.__type) or data is None:
             self.__data = data
         else:
@@ -175,12 +203,6 @@ class Node(object):
                 newcount = count
             return self.__recursion_root(node.parent, newcount)
 
-    def debug(self):
-        """Return debug information."""
-        return f"""Parent: {self.parent}
-Children: {', '.join([str(i) for i in self.children])}
-Data: {self.__data} ({self.__type})"""
-
 
 class Tree(object):
     """The tree data structure representing a collection of nodes.
@@ -198,7 +220,13 @@ class Tree(object):
         self.set_root(root_node)
 
     def set_root(self, root_node):
-        """Change the root node"""
+        """Set the root node of the tree.
+
+        Parameters
+        ----------
+        root_node : Node
+            The node to set as root.
+        """
         if isinstance(root_node, Node):
             root_node.set_root(self)
         elif root_node is not None:
@@ -227,6 +255,21 @@ class Tree(object):
             raise MissingNode("Root node is not specified for Tree")
 
     def __depth_first_search(self, node, condition):
+        """The Depth First Search Algorithm
+
+        Parameters
+        ----------
+        node : Node
+            The current node
+        condition : function
+            The condition to find a certain node
+
+        Returns
+        -------
+        Node/None
+            The target node which satisfies `condition`
+
+        """
         if node:
             if not node.is_top():
                 if condition(node):
