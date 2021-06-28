@@ -1,26 +1,52 @@
 // Tree data structure implementation for Rust
 
-#[derive(Debug)] // printing debug information
-pub struct Node<'a> {
-    // Structure representing a node
+// A singular node
+#[derive(Debug)]
+pub struct Node<T> {
     pub id: String,
-    pub parent: Option<&'a Node<'a>>,
-    pub children: Vec<&'a Node<'a>>,
+    pub val: T,
 }
 
-impl<'a> Node<'a> {
-    // Static method to create a new node
-    pub fn new(id: String) -> Node<'a> {
-        Node {
+impl<T> Node<T> {
+    // Create a new node
+    pub fn new(id: String, val: T) -> Node<T> {
+        return Node {
             id,
-            parent: None,
-            children: Vec::new(),
-        }
+            val
+        };
     }
+}
 
-    // Add a child to this node
-    pub fn add_child(&'a mut self, child: &'a mut Node<'a>) {
-        self.children.push(child);
-        child.parent = Some(self);
-    }
+// Tree containing and managing all nodes
+#[derive(Debug)]
+pub struct Tree<T> {
+    pub nodes: Vec<Node<T>>,
+}
+
+impl<T> Tree<T> {
+      // Create a new tree
+      pub fn new() -> Tree<T> {
+          return Tree {
+              nodes: Vec::new(),
+          };
+      }
+
+      // Register a node
+      pub fn add_node(&mut self, node: Node<T>) {
+          self.nodes.push(node);
+      }
+
+      // Get node
+      pub fn get_node(&self, id: String) -> Option<&Node<T>> {
+          match self.nodes.iter().position(|x| x.id == id) {
+                Some(n) => {
+                    // Found node
+                    Some(&self.nodes[n])
+                },
+                None => {
+                    // Couldn't find node
+                    None
+                }
+            }
+      }
 }
